@@ -1,0 +1,56 @@
+name: CI/CD Pipeline
+
+# Trigger khi push hoc merge vo nhnh develop
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # 2. Setup mi trng chy (V d dng Node.js, bn c th i thnh Python/Java ty app)
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Kim tra cu trc project
+      - name: Inspect Project Structure
+        run: |
+          echo "Danh sch cc file trong th mc gc:"
+          ls -la
+
+      # 4. Chy validate file bt buc (V d bt buc phi c file README.md)
+      - name: Validate Mandatory Files
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "Error: Thiu file README.md bt buc!"
+            exit 1
+          else
+            echo "Validation Pass:  tm thy README.md."
+          fi
+
+      # 5. Chy test hoc verify (M phng chy Unit Test)
+      - name: Run Unit Tests
+        run: |
+          echo "ang chy b test..."
+          echo "Test 1: Kim tra kt ni Database -> OK"
+          echo "Test 2: Kim tra API response -> OK"
+          echo "Tt c test u pass!"
+
+      # 6. (B sung cho CD) M phng Deploy ln Server/Local
+      - name: Deploy to Staging Server
+        run: |
+          echo "Bt u tin trnh Deploy..."
+          echo "ang copy build files ln Server qua SSH..."
+          echo "Restarting services... Hon tt!"
