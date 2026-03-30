@@ -1,0 +1,32 @@
+name: CI/CD Demo
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run test
+      run: npm test
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy (local gi lp)
+      run: echo "Deploy success"
