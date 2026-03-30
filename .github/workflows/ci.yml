@@ -1,0 +1,38 @@
+name: Custom CI Pipeline
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  ci-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name:  Checkout source code
+      uses: actions/checkout@v3
+
+    - name:  Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name:  Check project structure
+      run: |
+        echo "Checking project structure..."
+        ls -la
+
+    - name:  Validate required files
+      run: |
+        echo "Checking required files..."
+        test -f package.json && echo "package.json OK"
+        test -f README.md && echo "README.md OK"
+
+    - name:  Run test
+      run: |
+        echo "Running test..."
+        npm install
+        npm test
+
+    - name:  Show logs
+      run: echo "CI DONE SUCCESSFULLY"
